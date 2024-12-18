@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head th:fragment="headContent">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Java MiCuentaWeb</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/journal/bootstrap.min.css" integrity="sha384-QDSPDoVOoSWz2ypaRUidLmLYl4RyoBWI44iA5agn6jHegBxZkNqgm2eHb6yZ5bYs" crossorigin="anonymous" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <th:block th:replace="~{::dynamicHead}"></th:block>
+    <style>
+	body {
+  		font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  		background-color: #ececec!important;
+	}
+
+	h2 {
+  		font-size: 18px !important;
+  		color    : #333;
+	}
+
+	li {
+  		padding-right: 5px;
+  		font-weight: 700;
+  		font-family: "News Cycle", "Arial Narrow Bold", sans-serif;
+	}
+
+	.container {
+  		border-radius: 4px;
+	}
+
+	.left-column,
+	.right-column,
+	.center-column {
+ 		flex   : 1;
+  		padding: 20px;
+  		padding-bottom: 0;
+	}
+
+	.customer-details,
+	.billing-details,
+	.payment-form,
+	.result-form {
+  		background-color: white;
+  		margin-bottom   : 20px;
+  		padding         : 20px;
+  		border-radius: 4px;
+	}
+
+	@media (max-width: 768px) {
+  		.checkout-container {
+   		flex-flow: column;
+    	min-width: 80%;
+  	}
+
+  	.left-column,
+  	.right-column {
+    		width: 100%;
+  	}
+	}
+
+	.form-group label {
+  		font-size: 0.8rem;
+  	}
+
+	.form-control {
+  		font-size: 0.8rem;
+  		padding: 5px 10px;
+  		height: auto;
+	}
+  
+	.form-group {
+  		margin-bottom: 10px!important;
+	}
+
+	.btn-primary {
+  		width: 100%;
+  	background-color: #FF2D46!important;
+  	height: 50px;
+	}
+
+	pre {
+  	background-color: #000000;
+  	color: white!important;
+	}
+
+	#micuentawebstd_rest_wrapper {
+  		display: flex;
+  		justify-content: center;
+	}
+
+	details summary h2 {
+  		display: inline;
+  		margin: 0;
+	}
+    </style>
+</head>
+
+<body>
+    <main th:fragment="mainContent">
+          	<nav class="navbar bg-primary" style="background-color: #FF2D46!important;">
+        		<div class="container-fluid">
+				<a th:href="@{/}" class="navbar-brand mb-1"><img src="https://iziweb001b.s3.amazonaws.com/webresources/img/logo.png" width="80"></a>
+        		</div>
+    		</nav> 	
+		<div th:replace="~{::dynamicContent}"></div>
+
+    </main>
+</body>
+</html>
