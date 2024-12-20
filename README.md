@@ -6,15 +6,15 @@
 
 ## Índice
 
-➡️ [1. Introducción](https://github.com/izipay-pe/Readme-Template/tree/main?tab=readme-ov-file#%EF%B8%8F-1-introducci%C3%B3n)  
-🔑 [2. Requisitos previos](https://github.com/izipay-pe/Readme-Template/tree/main?tab=readme-ov-file#-2-requisitos-previos)  
-🚀 [3. Ejecutar ejemplo](https://github.com/izipay-pe/Readme-Template/tree/main?tab=readme-ov-file#-3-ejecutar-ejemplo)  
-🔗 [4. Pasos de integración](https://github.com/izipay-pe/Readme-Template/tree/main?tab=readme-ov-file#4-pasos-de-integraci%C3%B3n)  
-💻 [4.1. Desplegar pasarela](https://github.com/izipay-pe/Readme-Template/tree/main?tab=readme-ov-file#41-desplegar-pasarela)  
-💳 [4.2. Analizar resultado de pago](https://github.com/izipay-pe/Readme-Template/tree/main?tab=readme-ov-file#42-analizar-resultado-del-pago)  
-📡 [4.3. Pase a producción](https://github.com/izipay-pe/Readme-Template/tree/main?tab=readme-ov-file#43pase-a-producci%C3%B3n)  
-🎨 [5. Personalización](https://github.com/izipay-pe/Readme-Template/tree/main?tab=readme-ov-file#-5-personalizaci%C3%B3n)  
-📚 [6. Consideraciones](https://github.com/izipay-pe/Readme-Template/tree/main?tab=readme-ov-file#-6-consideraciones)
+➡️ [1. Introducción](https://github.com/izipay-pe/Popin-PaymentForm-Springboot-Java/tree/main?tab=readme-ov-file#%EF%B8%8F-1-introducci%C3%B3n)  
+🔑 [2. Requisitos previos](https://github.com/izipay-pe/Popin-PaymentForm-Springboot-Java/tree/main?tab=readme-ov-file#-2-requisitos-previos)  
+🚀 [3. Ejecutar ejemplo](https://github.com/izipay-pe/Popin-PaymentForm-Springboot-Java/tree/main?tab=readme-ov-file#-3-ejecutar-ejemplo)  
+🔗 [4. Pasos de integración](https://github.com/izipay-pe/Popin-PaymentForm-Springboot-Java/tree/main?tab=readme-ov-file#4-pasos-de-integraci%C3%B3n)  
+💻 [4.1. Desplegar pasarela](https://github.com/izipay-pe/Popin-PaymentForm-Springboot-Java/tree/main?tab=readme-ov-file#41-desplegar-pasarela)  
+💳 [4.2. Analizar resultado de pago](https://github.com/izipay-pe/Popin-PaymentForm-Springboot-Java/tree/main?tab=readme-ov-file#42-analizar-resultado-del-pago)  
+📡 [4.3. Pase a producción](https://github.com/izipay-pe/Popin-PaymentForm-Springboot-Java/tree/main?tab=readme-ov-file#43pase-a-producci%C3%B3n)  
+🎨 [5. Personalización](https://github.com/izipay-pe/Popin-PaymentForm-Springboot-Java/tree/main?tab=readme-ov-file#-5-personalizaci%C3%B3n)  
+📚 [6. Consideraciones](https://github.com/izipay-pe/Popin-PaymentForm-Springboot-Java/tree/main?tab=readme-ov-file#-6-consideraciones)
 
 ## ➡️ 1. Introducción
 
@@ -47,7 +47,7 @@ git clone https://github.com/izipay-pe/Popin-PaymentForm-Springboot-Java
 
 ### Datos de conexión 
 
-Reemplace **[CHANGE_ME]** con sus credenciales de `API REST` extraídas desde el Back Office Vendedor, revisar [Requisitos previos](https://github.com/izipay-pe/Readme-Template/tree/main?tab=readme-ov-file#-2-requisitos-previos).
+Reemplace **[CHANGE_ME]** con sus credenciales de `API REST` extraídas desde el Back Office Vendedor, revisar [Requisitos previos](https://github.com/izipay-pe/Popin-PaymentForm-Springboot-Java/tree/main?tab=readme-ov-file#-2-requisitos-previos).
 
 - Editar el archivo `config.properties` en la ruta `src/main/resources/`:
 ```java
@@ -311,7 +311,7 @@ Puede intentar realizar una transacción utilizando una tarjeta de prueba con la
 
 ## 📡4.3.Pase a producción
 
-Reemplace **[CHANGE_ME]** con sus credenciales de PRODUCCIÓN de `API REST` extraídas desde el Back Office Vendedor, revisar [Requisitos Previos](https://github.com/izipay-pe/Readme-Template/tree/main?tab=readme-ov-file#-2-requisitos-previos).
+Reemplace **[CHANGE_ME]** con sus credenciales de PRODUCCIÓN de `API REST` extraídas desde el Back Office Vendedor, revisar [Requisitos Previos](https://github.com/izipay-pe/Popin-PaymentForm-Springboot-Java/tree/main?tab=readme-ov-file#-2-requisitos-previos).
 
 - Editar el archivo `config.properties` en la ruta `src/main/resources/`:
 ```java
