@@ -1,4 +1,4 @@
-package com.example.popinpaymentform.controller;
+package com.example.embeddedpaymentform.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,24 +29,21 @@ public class McwController {
     private WebClient.Builder webClientBuilder;
 
     // Método para generar un orderNumber basado en la hora
-    public String generarOrderId() {
+    public String generateOrderId() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("'Order-'yyyyMMddHHmmss");
         return LocalDateTime.now().format(formatter);
     }
 
 
     // Genera el FormToken para el despliegue de la pasarela en web
-    public String generarToken(Map<String, String> parameters) {
+    public String generateFormToken(Map<String, String> parameters) {
         
 
 	// Obteniendo claves API
-	String merchantCode = properties.getProperty("merchantCode");
-	String password =  properties.getProperty("password");
-        String publicKey = properties.getProperty("publicKey");
-	String hmacKey = properties.getProperty("hmacKey");
+	String USERNAME = properties.getProperty("USERNAME");
+	String PASSWORD =  properties.getProperty("PASSWORD");
 	String formToken = "";
 
-	// Definiendo valores para la estructura del Json
 	//// Crear el cuerpo de la solicitud JSON
         JSONObject billingDetails = new JSONObject();
         billingDetails.put("firstName", parameters.get("firstName"));
@@ -75,31 +72,29 @@ public class McwController {
         requestBody.put("customer", customer);
         requestBody.put("orderId", parameters.get("orderId"));
 	
-	// Creando la Conexión
 	try {
-	  // Encabezado Basic con concatenación de "usuario:contraseña" en base64
-	  String encoded = Base64.getEncoder().encodeToString((merchantCode+":"+password).getBytes(StandardCharsets.UTF_8));
+	 // Encabezado Basic con concatenación de "usuario:contraseña" en base64
+	 String encoded = Base64.getEncoder().encodeToString((USERNAME+":"+PASSWORD).getBytes(StandardCharsets.UTF_8));
 
           // Crear la conexión a la API para la creación del FormToken
-	  WebClient webClient = webClientBuilder.build();
-	  String response = webClient.post()
-		  .uri("https://api.micuentaweb.pe/api-payment/V4/Charge/CreatePayment")
-		  .header(HttpHeaders.AUTHORIZATION, "Basic " + encoded)
-		  .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-		  .bodyValue(requestBody.toString())
-		  .retrieve()
-		  .bodyToMono(String.class)
-		  .block();
+	 WebClient webClient = webClientBuilder.build();
+	 String response = webClient.post()
+		 .uri("https://api.micuentaweb.pe/api-payment/V4/Charge/CreatePayment")
+		 .header(HttpHeaders.AUTHORIZATION, "Basic " + encoded)
+		 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+		 .bodyValue(requestBody.toString())
+		 .retrieve()
+		 .bodyToMono(String.class)
+		 .block();
 
-	  // Extraemos el FormToken
-	  JSONObject jsonResponse = new JSONObject(response); 
-	  formToken = jsonResponse.getJSONObject("answer").getString("formToken");
+	 // Extraemos el FormToken
+	 JSONObject jsonResponse = new JSONObject(response); 
+	 formToken = jsonResponse.getJSONObject("answer").getString("formToken");
 
         } catch (Exception e) {
             	e.printStackTrace();
         }
 	
-	// Retornamos el valor del FormToken
 	return formToken;
     	}
    
@@ -119,25 +114,10 @@ public class McwController {
 
 
     // Verifica la integridad del Hash recibido y el generado  	
-    public boolean checkHash(String krHash, String krHashKey, String krAnswer){
-	String passwordKey = properties.getProperty("password");
-	String hmacSha256Key = properties.getProperty("hmacKey");
-	String key;
+    public boolean checkHash(String krHash, String key, String krAnswer){
 	
-	// Verifica si la respuesta es de 'Retorno a la tienda' o de la 'IPN'
-	if ("sha256_hmac".equals(krHashKey)){
-		key = hmacSha256Key;
-	} else if ("password".equals(krHashKey)) {
-        	key = passwordKey;
-        } else {	
-		return false;
-        }
-       	
-	// Calculamos un Hash usando el valor del 'kr-answer' y el valor del 'kr-hash-key'
 	String calculatedHash = HmacSha256(krAnswer, key);
-	// Comparamos si el hash es igual y retornamos la respuesta
 	return calculatedHash.equals(krHash);
 
     }
 }
-
