@@ -1,4 +1,4 @@
-package com.example.popinpaymentform.controller;
+package com.example.embeddedpaymentform.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,7 +28,7 @@ public class McwSpringboot {
     @GetMapping({"/", "/checkout", "/result"})
     public String handleGet(Model model) {
         // Generate orderId
-        String orderId = mcwController.generarOrderId();
+        String orderId = mcwController.generateOrderId();
 	// Agrega el oderID al model para ser usado en el template
         model.addAttribute("orderId", orderId);
 	// Renderiza el template
@@ -55,14 +55,14 @@ public class McwSpringboot {
         }
 
         // Obtener PublicKey
-        String publicKey = properties.getProperty("publicKey");
+        String PUBLIC_KEY = properties.getProperty("PUBLIC_KEY");
 
         // Obtenemos el FormToken generado
-        String formToken = mcwController.generarToken(parameters);
+        String formToken = mcwController.generateFormToken(parameters);
         
 	// Agrega el FormToken y el PublicKey al modelo
         model.addAttribute("formToken", formToken);
-        model.addAttribute("publicKey", publicKey);
+        model.addAttribute("PUBLIC_KEY", PUBLIC_KEY);
         
 	// Renderiza el template
         return "checkout";
@@ -77,19 +77,19 @@ public class McwSpringboot {
         Model model
     	) {
 	
+	String HMAC_SHA256 = properties.getProperty("HMAC_SHA256");
+	
 	// Asignando los valores de la respuesta de Izipay en las variables
 	String krHash = resultParameters.get("kr-hash");
         String krHashAlgorithm = resultParameters.get("kr-hash-algorithm");
         String krAnswerType = resultParameters.get("kr-answer-type");
         String krAnswer = resultParameters.get("kr-answer");
         String krHashKey = resultParameters.get("kr-hash-key");
-	
 
-	// Válida que la data POST que obtiene /result tenga los valores esperados
-        if (krHash == null || krHashAlgorithm == null || krAnswerType == null || 
-            krAnswer == null || krHashKey == null) {
-            return "error";
-        }
+	// Válida que la respuesta sea íntegra comprando el hash recibido en el 'kr-hash' con el generado con el 'kr-answer'
+	if (!mcwController.checkHash(krHash, HMAC_SHA256, krAnswer)){
+		return "error";
+	}
 
         // Almacenamos los datos del kr-answer en Json
         JSONObject jsonResponse = new JSONObject(krAnswer);
@@ -106,29 +106,21 @@ public class McwSpringboot {
         double orderAmountDouble = (double) orderTotalAmount / 100;
         String orderAmount = String.format("%.02f", orderAmountDouble);
 
-        // Válida que la respuesta sea íntegra comprando el hash recibido en el 'kr-hash' con el generado con el 'kr-answer'
-        boolean isValidKey = mcwController.checkHash(krHash, krHashKey, krAnswer);
-        
-	// Procesa la condicional si la firma es correcta
-        if (isValidKey) {
-	    
-	    // Agrega diferentes atributos al modelo
-            model.addAttribute("krHash", krHash);
-            model.addAttribute("krHashAlgorithm", krHashAlgorithm);
-            model.addAttribute("krAnswerType", krAnswerType);
-            model.addAttribute("krAnswer", krAnswer);
-            model.addAttribute("krHashKey", krHashKey);
-            model.addAttribute("pJson", pJson);
-            model.addAttribute("orderStatus", orderStatus);
-            model.addAttribute("orderTotalAmount", orderAmount);
-            model.addAttribute("orderId", orderId);
-            model.addAttribute("currency", currency);
+	// Agrega diferentes atributos al modelo
+        model.addAttribute("krHash", krHash);
+        model.addAttribute("krHashAlgorithm", krHashAlgorithm);
+        model.addAttribute("krAnswerType", krAnswerType);
+        model.addAttribute("krAnswer", krAnswer);
+        model.addAttribute("krHashKey", krHashKey);
+        model.addAttribute("pJson", pJson);
+        model.addAttribute("orderStatus", orderStatus);
+        model.addAttribute("orderTotalAmount", orderAmount);
+        model.addAttribute("orderId", orderId);
+        model.addAttribute("currency", currency);
             
-	    // Renderiza el template
-            return "result";
-        }
+	// Renderiza el template
+        return "result";
         
-        return "error";
     }
 
     /**
@@ -140,11 +132,17 @@ public class McwSpringboot {
 		@RequestParam Map<String, String> ipnParameters
     	) {
 	
+	String PASSWORD = properties.getProperty("PASSWORD");
+		
 	// Asignando los valores de la respuesta IPN en las variables
 	String krHash = ipnParameters.get("kr-hash");
         String krAnswer = ipnParameters.get("kr-answer");
-        String krHashKey = ipnParameters.get("kr-hash-key");
         
+	// Válida que la respuesta sea íntegra comprando el hash recibido en el 'kr-hash' con el generado con el 'kr-answer'
+	if (!mcwController.checkHash(krHash, PASSWORD, krAnswer)){
+		return "No valid IPN";
+	}
+
 	// Procesa la respuesta del pago en Json
         JSONObject jsonResponse = new JSONObject(krAnswer);
         
@@ -157,15 +155,7 @@ public class McwSpringboot {
         String orderId = jsonResponse.getJSONObject("orderDetails").getString("orderId");
         String uuid = transactions.getString("uuid");
         
-	// Válida que la respuesta sea íntegra comprando el hash recibido en el 'kr-hash' con el generado con el 'kr-answer'
-        boolean isValidKey = mcwController.checkHash(krHash, krHashKey, krAnswer);
-        
-	// Procesa la condicional si la firma es correcta
-        if (isValidKey) {
-		// Imprimiendo en la terminal el Order Status
-        	return "OK! Order Status: " + orderStatus;
-	} else {
-	    	return "No valid IPN";
-        }
+	// Retornando el Order Status
+        return "OK! Order Status: " + orderStatus;
     }
 }
